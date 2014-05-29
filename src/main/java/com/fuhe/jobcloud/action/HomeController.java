@@ -21,6 +21,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,9 @@ public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
+	@Autowired
+	private IndexSearch indexSearch;
+	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -80,17 +84,12 @@ public class HomeController {
 		
 		try {
 			
-			IndexSearch indexSearch=new IndexSearch();
-			indexSearch.setIndexDir("/Users/fuhe-apple-02/temp/index");
+			//IndexSearch indexSearch=new IndexSearch("/Users/fuhe-apple-02/temp/index");
 			
 			map.put("keyword", from.getKeyword());
-			
 			ResultModel<Job> result=indexSearch.doSearch(map,pageIndex,pageSize);
 			
-			model.addAttribute("pageCount", result.getPageCount());
-			model.addAttribute("list", result.getList());
 			model.addAttribute("form",from);
-			
 			model.addAttribute("result",result);
 		} catch (Exception e) {
 			
@@ -98,6 +97,14 @@ public class HomeController {
 		}
 		
 		return "jobs";
+	}
+
+	public IndexSearch getIndexSearch() {
+		return indexSearch;
+	}
+	
+	public void setIndexSearch(IndexSearch indexSearch) {
+		this.indexSearch = indexSearch;
 	}
 		
 }

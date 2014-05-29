@@ -66,7 +66,7 @@
          
          <div class="row">
        	
-			<c:forEach var="j" items="${list}">
+			<c:forEach var="j" items="${result.list}">
 				<div class="media">
         			<!--  
         			<a class="pull-left" href="#">

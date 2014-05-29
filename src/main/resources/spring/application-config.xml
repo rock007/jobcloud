@@ -9,10 +9,10 @@
          <context:component-scan
             base-package="org.springframework.samples.service"/>  
 
-  
-    <bean name="indexSearch" class="com.search.lucence.IndexSearch">
-    	<property name="indexDir" value="/Users/fuhe-apple-02/temp/index"></property>
+   -->
+   
+    <bean id="indexSearch" class="com.search.lucence.IndexSearch">
+    	<constructor-arg name="indexDir" value="/Users/fuhe-apple-02/temp/index"></constructor-arg>
     </bean>
-    -->
     
 </beans>
