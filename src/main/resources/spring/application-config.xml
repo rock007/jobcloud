@@ -15,4 +15,10 @@
     	<constructor-arg name="indexDir" value="/Users/fuhe-apple-02/temp/index"></constructor-arg>
     </bean>
     
+    <bean id="suggestSupport" class="com.search.lucence.SuggestSupport">
+    	<constructor-arg name="indexDir" value="/Users/fuhe-apple-02/temp/index"></constructor-arg>
+    	<constructor-arg name="indexSpellDir" value="/Users/fuhe-apple-02/temp/spell"></constructor-arg>
+    	<constructor-arg name="indexField" value="title,salary,companyName"></constructor-arg>
+    </bean>
+    
 </beans>

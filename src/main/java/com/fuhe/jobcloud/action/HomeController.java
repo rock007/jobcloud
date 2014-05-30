@@ -1,6 +1,7 @@
 package com.fuhe.jobcloud.action;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -24,17 +25,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fuhe.model.form.SearchForm;
 import com.search.comm.ResultModel;
 import com.search.db.model.Job;
 import com.search.lucence.IndexSearch;
+import com.search.lucence.SuggestSupport;
 
 /**
  * Handles requests for the application home page.
@@ -46,6 +50,9 @@ public class HomeController {
 
 	@Autowired
 	private IndexSearch indexSearch;
+
+	@Autowired
+	private SuggestSupport suggestSupport;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -99,6 +106,21 @@ public class HomeController {
 		return "jobs";
 	}
 
+	@RequestMapping(value = "/suggest")
+	public  ResponseEntity<String[]> suggest(@RequestParam(value = "k", required = false) String keyword, Principal principal) {
+		
+		HttpHeaders headers = new HttpHeaders();
+		//MediaType mediaType=new MediaType(MediaType.APPLICATION_JSON_VALUE,"json",Charset.forName("utf-8"));
+		
+		//headers.setContentType(mediaType);
+		
+		//headers.set("Content-Type", "application/json");
+		//headers.set("charset", "utf-8");
+		String words[]=suggestSupport.doWork(keyword);
+		 
+		return new ResponseEntity<String[]>(words, headers, HttpStatus.OK);
+	}
+	
 	public IndexSearch getIndexSearch() {
 		return indexSearch;
 	}

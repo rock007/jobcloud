@@ -53,7 +53,7 @@
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
           </p>
           <div class="well">
-            	<form action="jobs" method="post" class="form-inline">
+            	<form action="jobs" method="get" class="form-inline">
         
         			<div class="form-group" style="width:80%;">
         		
@@ -75,13 +75,12 @@
         			-->
         			<div class="media-body">
           				<h4 class="media-heading"><a href="${j.url}" target="blank">${j.title}</a> </h4>
-          				<small>${j.companyName}--上海 杨浦</small>
+          				<small> ${j.companyName}</small><small> 上海 杨浦 </small>
           				
+          				<span class="label label-danger">${j.salary}</span>
           				<blockquote>
           				${j.desc}
           				</blockquote>
-          				
-          				
           				<span class="label label-default">猎聘</span> <span class="label label-primary">10天前</span>
           				
         			</div>
