@@ -90,14 +90,21 @@ public class HomeController {
 		if(pageSize==null)pageSize=3;
 		
 		try {
-			
-			//IndexSearch indexSearch=new IndexSearch("/Users/fuhe-apple-02/temp/index");
-			
 			map.put("keyword", from.getKeyword());
 			ResultModel<Job> result=indexSearch.doSearch(map,pageIndex,pageSize);
 			
+			String words[]=suggestSupport.doWork(from.getKeyword());
+			
 			model.addAttribute("form",from);
 			model.addAttribute("result",result);
+			
+			model.addAttribute("words",words);
+			
+			//公司 group
+			
+			//地点 group
+			
+			
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -107,15 +114,10 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/suggest")
-	public  ResponseEntity<String[]> suggest(@RequestParam(value = "k", required = false) String keyword, Principal principal) {
+	public  ResponseEntity<String[]> suggest(@RequestParam(value = "q", required = false) String keyword, Principal principal) {
 		
 		HttpHeaders headers = new HttpHeaders();
-		//MediaType mediaType=new MediaType(MediaType.APPLICATION_JSON_VALUE,"json",Charset.forName("utf-8"));
 		
-		//headers.setContentType(mediaType);
-		
-		//headers.set("Content-Type", "application/json");
-		//headers.set("charset", "utf-8");
 		String words[]=suggestSupport.doWork(keyword);
 		 
 		return new ResponseEntity<String[]>(words, headers, HttpStatus.OK);

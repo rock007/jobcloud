@@ -18,6 +18,8 @@
     <script type="text/javascript" src="resources/jquery/jquery.form.js"></script>
     <script type="text/javascript" src="resources/jquery/jquery.atmosphere.js"></script>
 
+	<link rel="stylesheet" type="text/css" href="resources/jquery/suggest/jquery.suggest.css">
+	<script type="text/javascript" src="resources/jquery/suggest/jquery.suggest.js"></script>
 </head>
 <body>
 
@@ -57,7 +59,7 @@
         
         			<div class="form-group" style="width:80%;">
         		
-					<input type="text" name="keyword" value="${form.keyword }" class="form-control" placeholder="职位关键字">
+					<input type="text" id="keyword"  name="keyword" value="${form.keyword }" class="form-control" placeholder="职位关键字">
 				
 				</div>
 				<button type="submit" class="btn btn-default">试一下</button>
@@ -81,8 +83,10 @@
           				<blockquote>
           				${j.desc}
           				</blockquote>
-          				<span class="label label-default">猎聘</span> <span class="label label-primary">10天前</span>
-          				
+          				<span class="label label-default">
+          				<c:if test="${j.source=='liepin' }">猎聘 </c:if>
+          				<c:if test="${j.source=='lagou' }">拉钩 </c:if>
+          				 </span>  <span class="label label-primary">10天前</span>
         			</div>
         			
       			</div>
@@ -136,13 +140,25 @@
 		
 		<div class="panel panel-default">
   			<div class="panel-body">
-    			相关联职位：<a href="#">java程序员</a>、<a href="#">java高级工程师</a>、<a href="#">java软件工程师</a>、
-    			<a href="#">java程序员测试</a>、<a href="#">java高级工程师测试</a>、<a href="#">java软件工程师测试</a>
+    			相关联职位：
+    			<c:forEach var="w" items="${words }">
+    				<a href="#">${w }</a>、
+    			</c:forEach>
   			</div>
 		</div>
-        
+
+		<div class="panel">
+			
+			<h5>最近查询记录 <small><a href="#">清除</a></small></h5>
+  			<ul class="list-unstyled">
+  					<li> <a href="#">java 北京</a>  12340条  (0.11)秒</li>
+  					<li> <a href="#">dotnet 北京</a>  340条  (0.11)秒</li>
+			</ul>	
+			
+	   </div>
+	<!--            
           <div class="list-group">
-            <a href="#" class="list-group-item active">Link</a>
+            <a href="#" class="list-group-item active">net(1078条)</a>
             <a href="#" class="list-group-item">Link</a>
             <a href="#" class="list-group-item">Link</a>
             <a href="#" class="list-group-item">Link</a>
@@ -153,6 +169,8 @@
             <a href="#" class="list-group-item">Link</a>
             <a href="#" class="list-group-item">Link</a>
           </div>
+      -->    
+          
         </div><!--/span-->
         
         
@@ -168,6 +186,13 @@
     
 	<script type="text/javascript">
 	    $(document).ready(function() {
+	    	
+	    	 $("#keyword").suggest("suggest",{
+	             onSelect: function() {
+	            	 //alert(this.value);
+	             }
+	           } 
+	    	 );   
 	    	
 	    });
 	</script>	
