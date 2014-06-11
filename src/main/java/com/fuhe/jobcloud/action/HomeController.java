@@ -87,7 +87,7 @@ public class HomeController {
 		HashMap<String, String> map=new HashMap<String,String>();
 		
 		if(pageIndex==null)pageIndex=1;
-		if(pageSize==null)pageSize=3;
+		if(pageSize==null)pageSize=10;
 		
 		try {
 			map.put("keyword", from.getKeyword());

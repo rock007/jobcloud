@@ -93,7 +93,7 @@
 			</c:forEach>
          
 <ul class="pager">		
-<pg:pager url="jobs" items="${result.pageCount}" export="pageOffset,currentPageNumber=pageNumber" isOffset="false" maxPageItems="3"> 
+<pg:pager url="jobs" items="${result.pageCount}" export="pageOffset,currentPageNumber=pageNumber" isOffset="false" maxPageItems="10"> 
 	<c:if test="${not empty form.keyword }">
         <pg:param name="keyword" value="${form.keyword }"/>
     </c:if> 
