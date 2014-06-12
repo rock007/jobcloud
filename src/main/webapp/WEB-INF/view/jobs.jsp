@@ -77,7 +77,7 @@
         			-->
         			<div class="media-body">
           				<h4 class="media-heading"><a href="${j.url}" target="blank">${j.title}</a> </h4>
-          				<small> ${j.companyName}</small><small> 上海 杨浦 </small>
+          				<small> ${j.companyName}</small><small>${j.getProps().get("工作地点")}</small>
           				
           				<span class="label label-danger">${j.salary}</span>
           				<blockquote>
@@ -86,11 +86,13 @@
           				<span class="label label-default">
           				<c:if test="${j.source=='liepin' }">猎聘 </c:if>
           				<c:if test="${j.source=='lagou' }">拉钩 </c:if>
-          				 </span>  <span class="label label-primary">10天前</span>
+          				 </span>  <span class="label label-primary">${j.getProps().get("发布日期")}</span>
         			</div>
         			
       			</div>
 			</c:forEach>
+         
+      <span> ${result.message } </span>
          
 <ul class="pager">		
 <pg:pager url="jobs" items="${result.pageCount}" export="pageOffset,currentPageNumber=pageNumber" isOffset="false" maxPageItems="10"> 
@@ -134,7 +136,8 @@
         
         <div class="panel panel-default">
   			<div class="panel-body">
-    			热门城市：<a href="#">上海</a>、<a href="#">广州</a>、<a href="#">北京</a>
+    			热门城市：<a href="jobs?address=上海">上海</a>、<a href="jobs?address=广州">广州</a>、<a href="jobs?address=北京">北京</a>
+    			、<a href="jobs?address=杭州">杭州</a>、<a href="jobs?address=南京">南京</a>、<a href="jobs?address=武汉">武汉</a>
   			</div>
 		</div>
 		
@@ -142,7 +145,7 @@
   			<div class="panel-body">
     			相关联职位：
     			<c:forEach var="w" items="${words }">
-    				<a href="#">${w }</a>、
+    				<a href="jobs?keyword=${w }">${w }</a>、
     			</c:forEach>
   			</div>
 		</div>

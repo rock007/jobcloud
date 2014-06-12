@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -37,6 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fuhe.model.form.SearchForm;
 import com.search.comm.ResultModel;
 import com.search.db.model.Job;
+import com.search.db.model.vo.JobVO;
 import com.search.lucence.IndexSearch;
 import com.search.lucence.SuggestSupport;
 
@@ -91,7 +96,7 @@ public class HomeController {
 		
 		try {
 			map.put("keyword", from.getKeyword());
-			ResultModel<Job> result=indexSearch.doSearch(map,pageIndex,pageSize);
+			ResultModel<JobVO> result=indexSearch.doSearch(map,pageIndex,pageSize);
 			
 			String words[]=suggestSupport.doWork(from.getKeyword());
 			
@@ -101,15 +106,16 @@ public class HomeController {
 			model.addAttribute("words",words);
 			
 			//公司 group
-			
-			//地点 group
-			
+			HashMap<String, Integer> companyMap=indexSearch.group("companyName", from.getKeyword());
+			model.addAttribute("companyMap",companyMap);
+			//salary group
+			HashMap<String, Integer> salaryMap=indexSearch.group("salary", from.getKeyword());
+			model.addAttribute("salaryMap",salaryMap);
 			
 		} catch (Exception e) {
 			
 			e.printStackTrace();
 		}
-		
 		return "jobs";
 	}
 
