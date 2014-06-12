@@ -1,7 +1,5 @@
 package com.fuhe.model.form;
 
-import java.io.UnsupportedEncodingException;
-
 public class SearchForm {
 
 	private String keyword;

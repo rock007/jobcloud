@@ -1,6 +1,7 @@
 package com.fuhe.jobcloud.action;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.Principal;
 import java.text.DateFormat;
@@ -33,15 +34,17 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fuhe.model.form.SearchForm;
 import com.search.comm.ResultModel;
+import com.search.comm.StringUtil;
 import com.search.db.model.Job;
 import com.search.db.model.vo.JobVO;
+import com.search.form.model.SearchForm;
 import com.search.lucence.IndexSearch;
 import com.search.lucence.SuggestSupport;
 
@@ -87,16 +90,19 @@ public class HomeController {
 	@RequestMapping(value = "/jobs")
 	public String doSearch(Locale locale, Model model,SearchForm from,
 			@RequestParam(value = "pageIndex", required = false) Integer pageIndex,
-			@RequestParam(value = "pageSize", required = false) Integer pageSize){
+			@RequestParam(value = "pageSize", required = false) Integer pageSize,
+			@CookieValue(value = "cookie_words", defaultValue = "") String wordsCookie,
+			HttpServletResponse response){
 		
-		HashMap<String, String> map=new HashMap<String,String>();
+		//HashMap<String, String> map=new HashMap<String,String>();
 		
 		if(pageIndex==null)pageIndex=1;
 		if(pageSize==null)pageSize=10;
 		
 		try {
-			map.put("keyword", from.getKeyword());
-			ResultModel<JobVO> result=indexSearch.doSearch(map,pageIndex,pageSize);
+			//map.put("keyword", from.getKeyword());
+			
+			ResultModel<JobVO> result=indexSearch.doSearch(from,pageIndex,pageSize);
 			
 			String words[]=suggestSupport.doWork(from.getKeyword());
 			
@@ -111,6 +117,18 @@ public class HomeController {
 			//salary group
 			HashMap<String, Integer> salaryMap=indexSearch.group("salary", from.getKeyword());
 			model.addAttribute("salaryMap",salaryMap);
+			
+			String words_search[]=wordsCookie.split("#");
+			if(!StringUtil.isIn(from.getKeyword(), words_search)){
+				
+				wordsCookie+=from.getKeyword()+"#";
+			}
+			
+			model.addAttribute("words_cookie",words_search);
+			
+			Cookie foo = new Cookie("cookie_words", URLEncoder.encode(wordsCookie, "UTF-8") ); 
+			foo.setMaxAge(60*60*24*10); //10天
+			response.addCookie(foo); 
 			
 		} catch (Exception e) {
 			

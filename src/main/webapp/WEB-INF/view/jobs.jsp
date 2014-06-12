@@ -68,6 +68,8 @@
          
          <div class="row">
        	
+       	 <small> ${result.message } </small>
+       	 
 			<c:forEach var="j" items="${result.list}">
 				<div class="media">
         			<!--  
@@ -77,7 +79,7 @@
         			-->
         			<div class="media-body">
           				<h4 class="media-heading"><a href="${j.url}" target="blank">${j.title}</a> </h4>
-          				<small> ${j.companyName}</small><small>${j.getProps().get("工作地点")}</small>
+          				<small> ${j.companyName}</small>
           				
           				<span class="label label-danger">${j.salary}</span>
           				<blockquote>
@@ -86,13 +88,11 @@
           				<span class="label label-default">
           				<c:if test="${j.source=='liepin' }">猎聘 </c:if>
           				<c:if test="${j.source=='lagou' }">拉钩 </c:if>
-          				 </span>  <span class="label label-primary">${j.getProps().get("发布日期")}</span>
+          				 </span>&nbsp&nbsp<span class="label label-primary">${j.getProps().get("发布日期")}</span>&nbsp&nbsp<span class="label label-info">${j.getProps().get("工作地点")}</span>
         			</div>
         			
       			</div>
 			</c:forEach>
-         
-      <span> ${result.message } </span>
          
 <ul class="pager">		
 <pg:pager url="jobs" items="${result.pageCount}" export="pageOffset,currentPageNumber=pageNumber" isOffset="false" maxPageItems="10"> 
@@ -130,18 +130,9 @@
 </ul>          		
          </div>
          
-        </div><!--/span-->
-
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-        
-        <div class="panel panel-default">
-  			<div class="panel-body">
-    			热门城市：<a href="jobs?address=上海">上海</a>、<a href="jobs?address=广州">广州</a>、<a href="jobs?address=北京">北京</a>
-    			、<a href="jobs?address=杭州">杭州</a>、<a href="jobs?address=南京">南京</a>、<a href="jobs?address=武汉">武汉</a>
-  			</div>
-		</div>
-		
-		<div class="panel panel-default">
+         <div class="row">
+         
+    	<div class="panel panel-default">
   			<div class="panel-body">
     			相关联职位：
     			<c:forEach var="w" items="${words }">
@@ -149,16 +140,66 @@
     			</c:forEach>
   			</div>
 		</div>
+    
+         </div>
+         
+        </div><!--/span-->
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+        
+        <div class="panel panel-default">
+  			<div class="panel-body">
+    			热门城市：<a href="jobs?keyword=${form.keyword }&address=上海">上海</a>、<a href="jobs?keyword=${form.keyword }&address=广州">广州</a>、<a href="jobs?keyword=${form.keyword }&address=北京">北京</a>
+    			、<a href="jobs?keyword=${form.keyword }&address=杭州">杭州</a>、<a href="jobs?keyword=${form.keyword }&address=南京">南京</a>、<a href="jobs?keyword=${form.keyword }&address=武汉">武汉</a>
+  			</div>
+		</div>
+		
 
 		<div class="panel">
-			
+			<h5>热门公司</h5>
+  			<ul class="list-unstyled">
+  					<c:forEach var="c" items="${companyMap}"> 
+						<li>  
+						<c:if test="${!(form.company eq c.key) }">
+							<a href="jobs?keyword=${form.keyword }&company=${c.key}">${c.key}</a>
+						</c:if>
+						<c:if test="${ form.company eq c.key }">
+							${c.key}
+						</c:if>
+						 ${c.value}条</li> 
+					</c:forEach> 
+			</ul>	
+	   </div>
+	   <div class="panel">
+			<h5>薪水范围</h5>
+  			<ul class="list-unstyled">
+  					<c:forEach var="s" items="${salaryMap}"> 
+						<li> 
+							
+							<c:if test="${!(form.salary eq s.key) }">
+								<a href="jobs?keyword=${form.keyword }&salary=${s.key}">${s.key}</a>
+							</c:if>
+							<c:if test="${ form.salary eq s.key }">
+								${s.key}
+							</c:if>
+							
+							  ${s.value}条</li> 
+					</c:forEach> 
+			</ul>	
+	   </div>
+	   
+	   <div class="panel">
 			<h5>最近查询记录 <small><a href="#">清除</a></small></h5>
   			<ul class="list-unstyled">
-  					<li> <a href="#">java 北京</a>  12340条  (0.11)秒</li>
-  					<li> <a href="#">dotnet 北京</a>  340条  (0.11)秒</li>
+  					<c:forEach var="k" items="${words_cookie }" >
+  						<li> <a href="jobs?keyword={k }">${k }</a></li>
+  					</c:forEach>
+  					<!--  
+  					${cookie.cookie_words.value }
+  					-->
 			</ul>	
-			
 	   </div>
+	   
 	<!--            
           <div class="list-group">
             <a href="#" class="list-group-item active">net(1078条)</a>
